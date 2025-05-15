@@ -61,7 +61,7 @@ begin
     reg_6 : reg16bits port map(clk => clk, rst => rst, wr_en => wr_en_6, data_in => write_data, data_out => data_out_6);
     reg_7 : reg16bits port map(clk => clk, rst => rst, wr_en => wr_en_7, data_in => write_data, data_out => data_out_7);
 	
-	mux : mux16bits_8x3x1 port map(
+	mux : mux16bits_8x1 port map(
         entr0 => data_zero,
         entr1 => data_out_1,
         entr2 => data_out_2,
