@@ -1,0 +1,25 @@
+v 4
+file . "ULA.vhd" "4db8270fbf2112bc41431c389daea97e4e40f8fc" "20250504161641.012":
+  entity ula at 1( 0) + 0 on 97;
+  architecture a_ula of ula at 14( 293) + 0 on 98;
+file . "soma_e_subtrai.vhd" "bdd9142e500ed5b427d6779402ea6f98f474f543" "20250504161640.811":
+  entity soma_e_subtrai at 1( 0) + 0 on 93;
+  architecture a_soma_e_subtrai of soma_e_subtrai at 13( 264) + 0 on 94;
+file . "mux_8x1_tb.vhd" "fc118d491dbdfa3b3a1fd53b94dd288b45b08e54" "20250504161640.616":
+  entity mux_8x1_tb at 1( 0) + 0 on 89;
+  architecture a_mux_8x1_tb of mux_8x1_tb at 7( 77) + 0 on 90;
+file . "mux_4x1_16bits.vhd" "d1330ea095586fcb77e3f8cd4e391e52bfb0af6c" "20250504161640.435":
+  entity mux_4x1_16bits at 1( 0) + 0 on 85;
+  architecture a_mux_4x1_16bits of mux_4x1_16bits at 13( 283) + 0 on 86;
+file . "mux_8x1.vhd" "0ec14e716d85f35da423cb1d05e6c47bf6990b42" "20250504161640.523":
+  entity mux_8x1 at 1( 0) + 0 on 87;
+  architecture a_mux_8x1 of mux_8x1 at 14( 250) + 0 on 88;
+file . "somador_16bits.vhd" "0040d3b5a4c226ab43cacd5e2963fdcf1a41bdf0" "20250504161640.714":
+  entity somador_16bits at 1( 0) + 0 on 91;
+  architecture a_somador_16bits of somador_16bits at 12( 223) + 0 on 92;
+file . "soma_e_subtrai_tb.vhd" "73679978118ec7cfdef790cecb563b805e35688d" "20250504161640.911":
+  entity soma_e_subtrai_tb at 1( 0) + 0 on 95;
+  architecture a_soma_e_subtrai_tb of soma_e_subtrai_tb at 8( 111) + 0 on 96;
+file . "ULA_tb.vhd" "b210ad29d2be85a7638aec6b81b881b5b50b2593" "20250504161641.113":
+  entity ula_tb at 1( 0) + 0 on 99;
+  architecture a_ula_tb of ula_tb at 8( 100) + 0 on 100;
