@@ -4,9 +4,9 @@ use ieee.numeric_std.all;
 
 entity banco_reg16bits is
 	port(
-        read_reg1 : IN unsigned(2 DOWNTO 0);
-        write_reg : IN unsigned(2 DOWNTO 0);
-        reg_write : IN STD_LOGIC;
+        readSel : IN unsigned(2 DOWNTO 0);
+        writeSel : IN unsigned(2 DOWNTO 0);
+        wr_en : IN STD_LOGIC;
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
         read_data1 : OUT unsigned(15 DOWNTO 0);
@@ -62,7 +62,7 @@ begin
     reg_7 : reg16bits port map(clk => clk, rst => rst, wr_en => wr_en_7, data_in => write_data, data_out => data_out_7);
 	
 	mux : mux16bits_8x1 port map(
-        entr0 => data_zero,
+        entr0 => data_out_0,
         entr1 => data_out_1,
         entr2 => data_out_2,
         entr3 => data_out_3,
@@ -70,12 +70,12 @@ begin
         entr5 => data_out_5,
         entr6 => data_out_6,
         entr7 => data_out_7,
-        sel => read_reg1,
+        sel => readSel,
         saida => read_data1);
 		
-	decoder : decoder_3x8 port map(
-        write_register => write_reg,
-        write_enable => reg_write,
+	decoder : decoder3x8 port map(
+        wr_reg => writeSel,
+        wr_en => wr_en,
         saida(0) => wr_en_0,
         saida(1) => wr_en_1,
         saida(2) => wr_en_2,
