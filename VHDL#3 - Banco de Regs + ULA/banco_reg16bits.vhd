@@ -25,7 +25,7 @@ architecture a_banco_reg16bits of banco_reg16bits is
 		);
 	end component;
 	
-	component mux16bits_8x1 is
+	component mux_8x1_16bits is
 		port(
 			entr0 : in unsigned(15 downto 0);
 			entr1 : in unsigned(15 downto 0);
@@ -40,9 +40,9 @@ architecture a_banco_reg16bits of banco_reg16bits is
 		);	
 	end component;
 	
-	component decoder3x8 is 
+	component decoder_3x8_3bits is 
 		port(
-			wr_reg : in unsigned(2 downto 0);
+			selDec : in unsigned(2 downto 0);
 			wr_en : in std_logic;
 			saida : out unsigned(7 downto 0)
 		);
@@ -61,7 +61,7 @@ begin
     reg_6 : reg16bits port map(clk => clk, rst => rst, wr_en => wr_en_6, data_in => write_data, data_out => data_out_6);
     reg_7 : reg16bits port map(clk => clk, rst => rst, wr_en => wr_en_7, data_in => write_data, data_out => data_out_7);
 	
-	mux : mux16bits_8x1 port map(
+	mux : mux_8x1_16bits port map(
         entr0 => data_out_0,
         entr1 => data_out_1,
         entr2 => data_out_2,
@@ -73,8 +73,8 @@ begin
         sel => readSel,
         saida => read_data1);
 		
-	decoder : decoder3x8 port map(
-        wr_reg => writeSel,
+	decoder : decoder_3x8_3bits port map(
+        selDec => writeSel,
         wr_en => wr_en,
         saida(0) => wr_en_0,
         saida(1) => wr_en_1,
