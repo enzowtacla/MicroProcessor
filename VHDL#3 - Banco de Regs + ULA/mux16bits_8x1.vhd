@@ -15,7 +15,7 @@ entity mux16bits_8x1 is
 		sel : in unsigned(2 downto 0);
 		saida : out unsigned(15 downto 0)
 	);
-end entity
+end entity;
 
 architecture a_mux16bits_8x1 of mux16bits_8x1 is 
 begin 
