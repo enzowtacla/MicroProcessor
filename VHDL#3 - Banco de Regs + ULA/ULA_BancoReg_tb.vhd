@@ -24,7 +24,7 @@ architecture a_ULA_BancoReg_tb of ULA_BancoReg_tb is
 	signal readSel, writeSel : unsigned (2 downto 0);
 	signal opSel : unsigned (1 downto 0);
 	signal clk, rst, wr_en_Banco, wr_en_Acumulador : std_logic;
-	signal entra_Banco, entra_Acumulador, saida_ULA : unsigned (15 downto 0);
+	signal entra_Banco, saida_ULA : unsigned (15 downto 0);
 	
 	constant period_time : time := 100 ns;
 	signal finished : std_logic := '0';
@@ -74,27 +74,35 @@ process
 
 begin
 
-	wait for 200 ns;
+	wait for 100 ns;
 	rst <= '1';
-	wait for 200 ns; -- A <- A + R0, R0 = 1, A = 0, RESULTADO: 0
+	wait for 100 ns; -- A <- A + R0, R0 = 1, A = 0, RESULTADO: 0
 	rst <= '0';
-	wr_en_Acumulador <= '1'; -- habilitar escrita no acumulador
+	wr_en_Acumulador <= '0'; -- habilitar escrita no acumulador
+	wr_en_Banco <= '1'; -- habilita escrita
 	opSel <= "00"; -- seleciona operação de soma
 	writeSel <= "000"; -- seleciona o reg que vai ser escrito
-	readSel <= "000"; -- seleciona o reg que vai ser lido
-	wr_en_Banco <= '1'; -- habilita escrita
+	readSel <= "000"; -- seleciona o reg que vai ser lido	
 	entra_Banco <= "0000000000000001"; -- valor a ser escrito no reg0 do banco	
-	wait for 200 ns; -- A <- A + R1, R1 = 2, A = 1, RESULTADO: 3
+	wait for 100 ns; -- Acumulador recebe o resultado da ULA = 1
+	wr_en_Acumulador <= '1';
+	wait for 100 ns; -- Desabilita para que ele não continue somando e escrevendo o valor no acumulador
+	wr_en_Acumulador <= '0'; 
+	wait for 100 ns; -- Soma 8 (Reg1) + 1 (Acumulador)
+	writeSel <= "001"; -- seleciona o reg que vai ser escrito
+	readSel <= "001"; -- seleciona o reg que vai ser lido	
+	entra_Banco <= "0000000000001000"; -- valor a ser escrito no reg1 do banco	
+	wait for 100 ns; -- Subtrai 8 - 1 = 7
+	opSel <= "01"; -- Seleciona subtracao
+	wait for 100 ns; -- 8 + 1 = 9
+	opSel <= "00";
+	entra_Banco <= "0000000000001000"; -- = 8
+	wr_en_Acumulador <= '1'; -- registra o resultado no acumulador
+	wait for 100 ns; -- Testa numero negativo 8-9 = FFFF
+	opSel <= "01"; 
 	wr_en_Acumulador <= '0';
-	writeSel <= "001"; 
-	readSel <= "001";
-	entra_Banco <= "0000000000000010"; 
-	wait for 200 ns; -- A <- A - R0, R0 = 1, A = 1, RESULTADO: 2
-	opSel <= "01";
-	writeSel <= "000"; -- seleciona o reg que vai ser escrito
-	readSel <= "000"; -- seleciona o reg que vai ser lido
-	wait for 200 ns;
-	wait for 200 ns;
+	wait for 100 ns; -- Pega o valor anterior registrado no reg0 = 1 para a subtracao que resulta em 1 - 9 = FFF8
+	readSel <= "000"; 
 
 	wait;
 
