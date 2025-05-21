@@ -25,11 +25,13 @@ entity ULA_BancoReg is
         opSel : in unsigned (1 downto 0);
         wr_en_Banco : in std_logic;
         wr_en_Acumulador : in std_logic;
+        useImm : in std_logic;
         clk : in std_logic;
         rst : in std_logic;
 
         saida_ULA: out unsigned(15 downto 0);
-        entra_Banco: in unsigned(15 downto 0)
+        entra_Banco: in unsigned(15 downto 0);
+        entra_Imm : in unsigned(15 downto 0)
     );
 end entity;
 
@@ -69,7 +71,15 @@ architecture a_ULA_BancoReg of ULA_BancoReg is
             );
     end component;
 
-    signal read_data1_out, read_data2_out, write_data_out : unsigned(15 downto 0);    
+    component mux_2x1_16bits is
+        port(
+        x0, x1 : in unsigned(15 downto 0);
+        sel: in std_logic;
+        y0 : out unsigned (15 downto 0)        
+    );
+    end component;
+
+    signal read_data1_out, read_data2_out, write_data_out, imm_in, mux2x1_out : unsigned(15 downto 0);    
     signal flagIgual_out, flagPar_out, flagResultNegativo_out, flagZero_out : std_logic;
 begin   
 
@@ -85,7 +95,7 @@ begin
 
     ula0 : ULA port map(
         entra1 => read_data1_out,
-        entra2 => read_data2_out,
+        entra2 => mux2x1_out,
         sel0 => opSel,
         saida => write_data_out,
 
@@ -101,6 +111,13 @@ begin
         wr_en => wr_en_Acumulador,
         data_in => write_data_out,
         data_out => read_data2_out
+    );
+
+    mux_Imm: mux_2x1_16bits port map(
+        x0 => read_data2_out,
+        x1 => entra_Imm,
+        sel => useImm,
+        y0 => mux2x1_out
     );
 
     saida_ULA <= write_data_out;
