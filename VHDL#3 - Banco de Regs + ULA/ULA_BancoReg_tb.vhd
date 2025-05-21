@@ -12,19 +12,22 @@ architecture a_ULA_BancoReg_tb of ULA_BancoReg_tb is
         writeSel : in unsigned(2 downto 0);
         opSel : in unsigned (1 downto 0);
         wr_en_Banco : in std_logic;
-        wr_en_Acumulador : in std_logic;
+        wr_en_Acumulador : in std_logic;		
+        useImm : in std_logic;
         clk : in std_logic;
         rst : in std_logic;        
 
 		saida_ULA : out unsigned(15 downto 0);        
-		entra_Banco : in unsigned(15 downto 0)
+		entra_Banco : in unsigned(15 downto 0);		
+        entra_Imm : in unsigned(15 downto 0)
+
         );
 	end component;
 
-	signal readSel, writeSel : unsigned (2 downto 0);
+	signal readSel, writeSel: unsigned (2 downto 0);
 	signal opSel : unsigned (1 downto 0);
-	signal clk, rst, wr_en_Banco, wr_en_Acumulador : std_logic;
-	signal entra_Banco, saida_ULA : unsigned (15 downto 0);
+	signal clk, rst, wr_en_Banco, wr_en_Acumulador , useImm : std_logic;
+	signal entra_Banco, saida_ULA, entra_Imm : unsigned (15 downto 0);
 	
 	constant period_time : time := 100 ns;
 	signal finished : std_logic := '0';
@@ -38,11 +41,13 @@ begin
         opSel => opSel,
 		wr_en_Banco => wr_en_Banco,
         wr_en_Acumulador => wr_en_Acumulador,
+		useImm => useImm,
 		clk => clk,
 		rst => rst,
 
 		saida_ULA => saida_ULA,
-		entra_Banco => entra_Banco
+		entra_Banco => entra_Banco,
+		entra_Imm => entra_Imm
 	);
 
 	reset_global: process
@@ -78,6 +83,7 @@ begin
 	rst <= '1';
 	wait for 100 ns; -- A <- A + R0, R0 = 1, A = 0, RESULTADO: 0
 	rst <= '0';
+	useImm <= '0'; -- Usar o valor do acumulador
 	wr_en_Acumulador <= '0'; -- habilitar escrita no acumulador
 	wr_en_Banco <= '1'; -- habilita escrita
 	opSel <= "00"; -- seleciona operação de soma
@@ -103,6 +109,13 @@ begin
 	wr_en_Acumulador <= '0';
 	wait for 100 ns; -- Pega o valor anterior registrado no reg0 = 1 para a subtracao que resulta em 1 - 9 = FFF8
 	readSel <= "000"; 
+	wait for 100 ns; -- Teste de subst com constante, 1 - 80 = FF81
+	entra_Imm <= "0000000010000000";
+	useImm <= '1'; -- Usa uma constante imediato 1+81 = 0081
+	wait for 100 ns; -- Teste com soma
+	opSel <= "00";
+	wait for 100 ns; -- Usa o valor do acumulador de volta que era 9
+	useImm <= '0';
 
 	wait;
 
