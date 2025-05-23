@@ -22,20 +22,24 @@ begin
 	soma <= out_soma;
 	subt <= out_subt;
 
+	--flag errada para zero, pegar na saida da ULA
 	-- 'VERIFICA' SE RESULTADO EH 0
 	out_zero <= '1' when out_soma="0000000000000000" else -- quando o resultado da soma = 0
 				'1' when out_subt="0000000000000000" else -- quando o resultado da subt = 0
 				'0';
 	
+	--remover 
 	-- 'VERIICA' SE X E Y SAO IGUAIS
 	igual <= '1' when out_subt="0000000000000000" else -- quando a subtração entre x-y = 0
 			 '0';
 
+	--remover
 	-- 'VERIFICA' SE O RESULTADO DA SOMA OU SUBT EH PAR
 	par <= not(out_soma(0) and out_subt(0));
 		   
 	zero <= out_zero;	
 
+	--pegar direto na saida da ULA
 	-- 'VERIFICA' SE O RESULTADO EH NEGATIVO
 	resultNegativo <= out_subt(15);
 end architecture;

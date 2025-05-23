@@ -43,9 +43,7 @@ architecture a_ULA_BancoReg of ULA_BancoReg is
             saida : out unsigned (15 downto 0);
 
 		    flagZero : out std_logic;
-		    flagResultNegativo : out std_logic;
-		    flagIgual : out std_logic;
-            flagPar : out std_logic
+		    flagResultNegativo : out std_logic
             );
     end component;
 
@@ -80,7 +78,7 @@ architecture a_ULA_BancoReg of ULA_BancoReg is
     end component;
 
     signal read_data1_out, read_data2_out, write_data_out, imm_in, mux2x1_out : unsigned(15 downto 0);    
-    signal flagIgual_out, flagPar_out, flagResultNegativo_out, flagZero_out : std_logic;
+    signal flagResultNegativo_out, flagZero_out : std_logic;
 begin   
 
     banco : banco_reg16bits port map(
@@ -100,9 +98,7 @@ begin
         saida => write_data_out,
 
 		flagZero => flagZero_out,
-		flagResultNegativo => flagResultNegativo_out,
-		flagIgual => flagIgual_out,
-        flagPar => flagPar_out
+		flagResultNegativo => flagResultNegativo_out
     );
 
     acumulador : reg16bits port map(
