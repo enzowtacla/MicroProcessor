@@ -10,7 +10,6 @@ architecture a_micro_processador_tb of micro_processador_tb is
 		port(
 			clk_global : in std_logic;
 			rst : in std_logic;
-            pc_wr_en : in std_logic;
             saidaROM: out unsigned (18 downto 0)
 			);
 		end component;
@@ -24,8 +23,7 @@ begin
 	-- UUT = UNIT UNDER TEST
 	uut : micro_processador port map(
 		clk_global => clk_global,
-		rst => rst,
-        pc_wr_en  => pc_wr_en
+		rst => rst
 		);
     
 	reset_global: process
@@ -58,12 +56,14 @@ process
 begin
 	rst <= '1';
 	wait for 100 ns;
-    rst <= '0';
-    pc_wr_en <= '1';
+    rst <= '0';    
     wait for 100 ns;
-    pc_wr_en <= '0';
-    wait for 100 ns;
-    pc_wr_en <= '1';
+	wait for 100 ns;
+	wait for 100 ns;
+	wait for 100 ns;
+	wait for 100 ns;
+	wait for 100 ns;
+
 	wait;
 end process;
 end architecture a_micro_processador_tb;

@@ -6,8 +6,10 @@ entity unidade_controle is
 	port(
         clk : in std_logic;
         rst : in std_logic;
-		opSel : in unsigned (6 downto 0);
-        pc_wr_en : out std_logic
+		opcode : in unsigned (6 downto 0);
+        rom_rd_en : out std_logic;
+        pc_wr_en : out std_logic;
+        jump_en : out std_logic
 		);
 end entity;
 
@@ -29,6 +31,9 @@ begin
 		rst => rst,
 		data_out => fft_out
     );
+    
+    rom_rd_en <= fft_out;
     pc_wr_en <= fft_out;
-	
+	jump_en <=  '1' when opcode="1111111" else
+                '0';
 end architecture;
