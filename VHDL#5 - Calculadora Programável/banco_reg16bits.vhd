@@ -3,12 +3,12 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity banco_reg16bits is
-	port(
+	port(		
+        clk : IN STD_LOGIC;
+        rst : IN STD_LOGIC;
         readSel : IN unsigned(2 DOWNTO 0);
         writeSel : IN unsigned(2 DOWNTO 0);
         wr_en : IN STD_LOGIC;
-        clk : IN STD_LOGIC;
-        rst : IN STD_LOGIC;
         read_data1 : OUT unsigned(15 DOWNTO 0);
         write_data : IN unsigned(15 DOWNTO 0)
 		);
