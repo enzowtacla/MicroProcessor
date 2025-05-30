@@ -2,11 +2,35 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+-- MSB b18               b0 LSB
+
+-- MOVA:  0001000 xxxxxxxxx  sss -- Move PARA O ACUMULADOR
+-- MOV:   0001001 xxxxxx ddd sss -- Move de um reg para outro
+
+-- NOP:   0000000 xxxxxxxxxxxx -- NÃO FAZ NADA
+-- JUMP:  1111111 xxxxx  ddddddd -- Salto incondicional
+-- BLEA:  1111110 xxxxxxxxx ddd -- Branch se for menos QUE ou IGUAL
+-- BMIA:  1111101 xxxxxxxxx ddd -- Branch se a flag de negativo = 1
+
+-- ADD:   0000001 xxxxxxxxx sss -- Soma com o valor que está no acumulador
+-- SUB:   0000010 xxxxxxxxx sss -- Subtrai com o valor que está no acumulador
+-- ADDI:  0000011 ccccccccc ddd -- Soma com uma constante(entra2) com valor no reg(entra1)
+-- SUBI:  0000100 ccccccccc ddd -- Soma com uma constante(entra2) com valor no reg(entra1)
+
+-- onde
+-- ddd  = identifica o registrador destino
+-- sss  = identifica o registrador fonte
+-- cccc = constante
+-- xxxx = é irrelevante
+
 entity micro_processador is
 	port(
 		clk_global : in std_logic;
 		rst : in std_logic;
-        saidaROM: out unsigned (18 downto 0)
+		state: out unsigned (1 downto 0);
+		saidaPC: out unsigned (1 downto 0);
+        saidaROM: out unsigned (18 downto 0);
+		saidaReg1, saidaAcumulador, saidaULA: out unsigned (15 downto 0)
 		);
 end entity;
 
@@ -58,6 +82,14 @@ architecture a_micro_processador of micro_processador is
     	);
 	end component;
 	
+	component mux_2x1_16bits is
+		port(
+			x0, x1 : in unsigned(15 downto 0);
+			sel: in std_logic;
+			y0 : out unsigned (15 downto 0)        
+		);
+	end component;
+
 	component ULA is
 		port(
 			entra1, entra2 : in unsigned (15 downto 0);
@@ -69,11 +101,37 @@ architecture a_micro_processador of micro_processador is
     );
 	end component;
 
-    signal clk, uc_rom_rd_out, uc_pc_wr_out, uc_jump_out : std_logic;
+	component banco_reg16bits is
+		port(			
+			clk : IN STD_LOGIC;
+			rst : IN STD_LOGIC;
+			readSel : IN unsigned(2 DOWNTO 0);
+			writeSel : IN unsigned(2 DOWNTO 0);
+			wr_en : IN STD_LOGIC;
+			read_data1 : OUT unsigned(15 DOWNTO 0);
+			write_data : IN unsigned(15 DOWNTO 0)
+		);
+	end component;
+
+	component reg16bits is
+		port(
+			clk : in std_logic;
+			rst : in std_logic;
+			wr_en : in std_logic;
+			data_in : in unsigned(15 downto 0);
+			data_out : out unsigned(15 downto 0)
+		);
+	end component;
+
+    signal clk, uc_rom_rd_out, uc_pc_wr_out, uc_jump_out, uc_useImm_out, uc_bancoReg_wr_out, uc_acumulador_wr_out : std_logic;
 	signal opcode, addres_mux_out : unsigned (6 downto 0);
     signal pc_data_out, soma_pc_out : unsigned(6 downto 0);
     signal rom_instructions : unsigned (18 downto 0);
 	signal test_address_jump : unsigned(6 downto 0);
+	signal write_data_out, read_data1_out, read_data2_out, muxImm_out : unsigned (15 downto 0);
+	signal imm_out : unsigned (8 downto 0);
+	signal selReg_out: unsigned (2 downto 0);
+
 begin
 	clk <= clk_global;
 	opcode <= rom_instructions (18 downto 12);
@@ -117,14 +175,40 @@ begin
         y0 => addres_mux_out 
 	);
 	
-	ula : ULA port map(
-		entra1 =>,
-		entra2 =>,
-		sel0 => ,
-		saida => ,
+	banco_reg : banco_reg16bits port map(
+        clk => clk_global,
+        rst => rst,
+		readSel => rom_instructions (2 downto 0),
+        writeSel => rom_instructions (2 downto 0),
+        wr_en => uc_bancoReg_wr_out,        
+        read_data1 => read_data1_out,
+        write_data => 
+	);
 
-		flagZero =>,
+	acumulador : reg16bits port map(
+		clk  => clk_global,
+		rst  => rst,
+		wr_en  => uc_acumulador_wr_out,
+		data_in  => write_data_out,
+		data_out  => read_data2_out
+	);
+
+	ula : ULA port map(
+		entra1 => read_data1_out,
+		entra2 => muxImm_out,
+		sel0 => ,
+		saida => write_data_out,
+
+		flagZero => , 
 		flagResultNegativo =>
 
 	);
+
+	mux_Imm: mux_2x1_16bits port map(
+        x0 => read_data2_out,
+        x1 => "0000000" & entra_Imm ,
+        sel => uc_useImm_out,
+        y0 => muxImm_out
+    );
+
 end architecture;
