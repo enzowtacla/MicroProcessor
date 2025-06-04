@@ -59,9 +59,9 @@ begin
 
 	-- Operações ULA 
 
-	opULA <= "00" when opcode="0000001" else -- ADD
-			 "01" when opcode="0000010" else -- SUB
+	opULA <= "00" when opcode="0000001" else -- ADD	
 			 "00" when opcode="0000011" else -- ADDI
+			 "01" when opcode="0000010" else -- SUB
 			 "01" when opcode="0000100" else -- SUBI
 			 "10" when opcode="0001000" else -- MOVA
 			 "10" when opcode="0001001" else -- MOV

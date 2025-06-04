@@ -21,7 +21,7 @@ architecture a_ULA of ULA is
             y0 : out unsigned (15 downto 0)  
         );
     end component;
-    signal out_soma, out_subt, out_mux, out_zero, out_zerado : unsigned(15 downto 0);
+    signal out_soma, out_subt, out_mux, out_zerado : unsigned(15 downto 0);
 	
 begin
     -- 00 = soma
