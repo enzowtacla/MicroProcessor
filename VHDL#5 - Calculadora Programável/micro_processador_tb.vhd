@@ -10,11 +10,18 @@ architecture a_micro_processador_tb of micro_processador_tb is
 		port(
 			clk_global : in std_logic;
 			rst : in std_logic;
-            saidaROM: out unsigned (18 downto 0)
+			state: out unsigned (1 downto 0);
+			saidaPC: out unsigned (6 downto 0);
+        	saidaROM: out unsigned (18 downto 0);
+			saidaReg1, saidaAcumulador, saidaULA: out unsigned (15 downto 0)
 			);
 		end component;
 		signal clk_global, rst,  pc_wr_en : std_logic;
-		
+		signal state : unsigned (1 downto 0);
+		signal saidaROM : unsigned (18 downto 0);
+		signal saidaReg1, saidaAcumulador, saidaULA : unsigned(15 downto 0);
+		signal saidaPC : unsigned (6 downto 0);
+
 		constant period_time : time := 100 ns;
 		signal finished : std_logic := '0';
 		signal reset : std_logic;
@@ -23,7 +30,13 @@ begin
 	-- UUT = UNIT UNDER TEST
 	uut : micro_processador port map(
 		clk_global => clk_global,
-		rst => rst
+		rst => rst,
+		state => state,
+		saidaPC => saidaPC,
+        saidaROM=> saidaROM,
+		saidaReg1=> saidaReg1,
+		saidaAcumulador=> saidaAcumulador, 
+		saidaULA=> saidaULA
 		);
     
 	reset_global: process

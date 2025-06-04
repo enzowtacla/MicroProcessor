@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 entity maq_estados is
    port( 
 		clk,rst: in std_logic;
-        estado: out unsigned(1 downto 0)
+      estado: out unsigned(1 downto 0)
    );
 end entity;
 architecture a_maq_estados of maq_estados is

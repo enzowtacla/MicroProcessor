@@ -28,10 +28,10 @@ begin
 	out_soma <= entra1+entra2;
     -- 01 = subt
 	out_subt <= entra1-entra2;
-    -- 10 = zerado
-    -- 11 = zerado
-    mux1 : mux_4x1_16bits port map(x0 => out_soma, x1 => out_subt, x2=> out_zerado, x3 => out_zerado, sel=> sel0, y0 => out_mux);
-    -- MUX: 00 = SOMA | 01 = SUBT
+    -- 10 = repassa valor em entra 1
+    -- 11 = NOP OU ZERADO
+    mux1 : mux_4x1_16bits port map(x0 => out_soma, x1 => out_subt, x2=> entra1, x3 => out_zerado, sel=> sel0, y0 => out_mux);
+    -- MUX: 00 = SOMA | 01 = SUBT | 10 = Repassa o valor que esta na entra1 | 11 = NOP
 	
     saida <= out_mux;
 	
