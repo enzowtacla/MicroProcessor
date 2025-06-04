@@ -37,21 +37,20 @@ end entity;
 architecture a_rom of rom is
 	type mem is array (0 to 127) of unsigned(18 downto 0);
 	constant conteudo_rom: mem := (		
-		-- Carrega R3 (o registrador 3) com o valor 5
 		0  => "0000000000000000000", -- Nao faz nada, por algum motivo esta sendo pulado no inicio da simulacao, talvez seja o reset?
 		1  => "0000011000000101011", -- ADDI reg3, 5 -- 302B
 		2  => "0000011000001000100", -- ADDI reg4, 8 -- 3044
 		3  => "0001000000000000011", -- MOVA reg3, GUARDA O R3 no acumulador -- 8003
 		4  => "0000001000000101100", -- ADD reg4, SOMA O VALOR que esta no acumulador com o reg4 e salva o resultado no reg5 -- 102C
 		5  => "0000100000000001101", -- SUBI reg5, 1 -- 400D
-		6  => "1111111000000010100", -- Salta para o endereco 20 -- 7F014
+		6  => "1111111000000010100", -- JUMP 0010100 Salta para o endereco 20 -- 7F014
 		7  => "0000000000000000100", -- PULOU - 4
 		8  => "0000000000000000101", -- PULOU - 5
 		9  => "1111111000000000011", -- PULOU - 7F003
 		10 => "0000000000000000110", -- PULOU - 6 
 		20 => "0001001000000011101", -- MOV reg5, reg3 -- 901D
-		21 => "1111111000000000011", -- Salta para o endereco 3 -- 7F003
-		22 => "0000011000000000011", -- Nunca sera executada, supostamente deveria zerar mas acredito que vai apenas adicionar +0 no reg3 -- 3003
+		21 => "1111111000000000011", -- JUMP 0000011 -- Salta para o endereco 3 -- 7F003
+		22 => "0000011000000000011", -- ADDI reg3, 0 Nunca sera executada, supostamente deveria zerar mas acredito que vai apenas adicionar +0 no reg3 -- 3003
 		others => (others => '0')
 	);
 	begin
