@@ -49,7 +49,7 @@ architecture a_rom of rom is
 		9  => "0000011000000000101", -- ADDI reg5, 0 Nunca sera executada, supostamente deveria zerar mas acredito que vai apenas adicionar +0 no reg5 -- 3005
 		10 => "0000000000000000000", -- NOP - Nao faz nada
 		20 => "0001001000000011101", -- MOV reg5, reg3 -- 901D
-		21 => "1111111000000000010", -- JUMP 0000011 -- Salta para o endereco 2 -- 7F003
+		21 => "1111111000000000010", -- JUMP 0000011 -- Salta para o endereco 2 -- 7F002
 		22 => "0000011000000000011", -- ADDI reg3, 0 Nunca sera executada, supostamente deveria zerar mas acredito que vai apenas adicionar +0 no reg3 -- 3003
 		others => (others => '0')
 	);
