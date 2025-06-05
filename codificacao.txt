@@ -1,17 +1,17 @@
 -- MSB b18               b0 LSB
 
+-- MOVOA: 0001010 xxxxxxxxx  ddd -- Move do ACUMULADOR para um REG
 -- MOVA:  0001000 xxxxxxxxx  sss -- Move PARA O ACUMULADOR
--- MOV:   0001001 xxxxxx ddd sss -- Move de um reg para outro
 
--- NOP:   0000000 xxxxxxxxxxxx -- NÃO FAZ NADA
+-- NOP:   0000000 xxxxxxxxxxxx -- NAO FAZ NADA
 -- JUMP:  1111111 xxxxx  ddddddd -- Salto incondicional
 -- BLEA:  1111110 xxxxxxxxx ddd -- Branch se for menos QUE ou IGUAL
 -- BMIA:  1111101 xxxxxxxxx ddd -- Branch se a flag de negativo = 1
 
--- ADD:   0000001 xxxxxx ddd sss -- Soma com o valor que está no acumulador e salva em um reg no banco de regs
--- SUB:   0000010 xxxxxx ddd sss -- Subtrai com o valor que está no acumulador e salva em um reg no banco de regs
--- ADDI:  0000011 ccccccccc ddd -- Soma com uma constante(entra2) com valor no reg(entra1)
--- SUBI:  0000100 ccccccccc ddd -- Soma com uma constante(entra2) com valor no reg(entra1)
+-- ADD:   0000001 xxxxxx xxx sss -- Soma com o valor que está no acumulador e salva NO ACUMULADOR
+-- SUB:   0000010 xxxxxx xxx sss -- Subtrai com o valor que está no acumulador e salva NO ACUMULADOR
+-- ADDI:  0000011 ccccccccc sss -- Soma com uma constante(entra2) com valor no reg(entra1)
+-- SUBI:  0000100 ccccccccc sss -- Soma com uma constante(entra2) com valor no reg(entra1)
 
 -- onde
 -- ddd  = identifica o registrador destino
