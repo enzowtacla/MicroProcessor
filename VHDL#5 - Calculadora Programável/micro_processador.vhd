@@ -7,7 +7,7 @@ use ieee.numeric_std.all;
 -- MOVA:  0001000 xxxxxxxxx  sss -- Move PARA O ACUMULADOR
 -- MOV:   0001001 xxxxxx ddd sss -- Move de um reg para outro
 
--- NOP:   0000000 xxxxxxxxxxxx -- NÃO FAZ NADA
+-- NOP:   0000000 xxxxxxxxxxxx -- NAO FAZ NADA
 -- JUMP:  1111111 xxxxx  ddddddd -- Salto incondicional
 -- BLEA:  1111110 xxxxxxxxx ddd -- Branch se for menos QUE ou IGUAL
 -- BMIA:  1111101 xxxxxxxxx ddd -- Branch se a flag de negativo = 1
