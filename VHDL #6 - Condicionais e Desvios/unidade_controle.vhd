@@ -43,7 +43,6 @@ architecture a_unidade_controle of unidade_controle is
     signal flagNegativo_out, flagOverflow_out, flagZero_out, flag_wr_en: std_logic;
 
 begin
-	flag_wr_en <= '0' when (opcode="0000101" or opcode="0001000" or  opcode="0001001" or opcode="0001010" or opcode="1111110" or opcode="1111101") and maq_estados_out="10" else '1';
 	
 	maq_estds : maq_estados port map(
         clk => clk ,
@@ -112,7 +111,6 @@ begin
 					    '1' when opcode="0000010" and maq_estados_out="10"else -- SUB					   
 					    '1' when opcode="0000011" and maq_estados_out="10"else -- ADDI
 					    '1' when opcode="0000100" and maq_estados_out="10" else -- SUBI
-						'1' when opcode="0000101" and maq_estados_out="10" else -- CMPI
 						'0';
 	-- Salto Incondicional
 	jump_en <=  '1' when opcode="1111111" and maq_estados_out="10" else -- JUMP	
@@ -120,18 +118,14 @@ begin
 				'1' when opcode="1111101" and maq_estados_out="10" and (flagNegativo_out='1') else -- BMI
                 '0';
 	
+	flag_wr_en <= '1' when not(opcode="1111110" or opcode="1111101") and maq_estados_out="10" else '0';
+	
 
 -- and (flagZero='1' or (flagResultNegativo xor flagOverflow)='1') - BLE
 -- and flagResultNegativo='1' - BMI
 end architecture;
 
 -- MSB b18               b0 LSB
-
--- MOVOA: 0001010 xxxxxxxxx  ddd -- Move do ACUMULADOR para um REG
--- MOVA:  0001000 xxxxxxxxx  sss -- Move o valor de um REG PARA O ACUMULADOR
--- MOV:   0001001 xxxxxx ddd sss -- Move de um reg para outro
-
-
 
 -- NOP:   0000000 xxxxxxxxxxxx -- NAO FAZ NADA
 -- JUMP:  1111111 xxxxx ddddddd -- Salto incondicional

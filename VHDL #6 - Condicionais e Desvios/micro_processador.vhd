@@ -166,7 +166,7 @@ architecture a_micro_processador of micro_processador is
 	end component;
 
 
-    signal clk, uc_rom_rd_out, uc_pc_wr_out,  uc_useImm_out, uc_bancoReg_wr_out, uc_acumulador_wr_out, uc_flag_wr_en_out : std_logic;
+    signal clk, uc_rom_rd_out, uc_pc_wr_out,  uc_useImm_out, uc_bancoReg_wr_out, uc_acumulador_wr_out : std_logic;
 	signal uc_jump_out, flagNegativo_out, flagZero_out, flagOverflow_out: std_logic;
 	
 	signal opcode, addres_mux_out, pc_data_out, soma_pc_out  : unsigned (6 downto 0);

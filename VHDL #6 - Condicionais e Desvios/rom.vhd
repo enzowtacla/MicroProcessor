@@ -8,8 +8,6 @@ use ieee.numeric_std.all;
 -- MOVA:  0001000 xxxxxxxxx  sss -- Move o valor de um REG PARA O ACUMULADOR
 -- MOV:   0001001 xxxxxx ddd sss -- Move de um reg para outro
 
-
-
 -- NOP:   0000000 xxxxxxxxxxxx -- NAO FAZ NADA
 -- JUMP:  1111111 xxxxx ddddddd -- Salto incondicional
 -- BLE:   1111110 xxxxx ddddddd -- Branch se for menos QUE ou IGUAL
