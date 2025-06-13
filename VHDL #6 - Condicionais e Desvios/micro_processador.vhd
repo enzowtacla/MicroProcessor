@@ -24,21 +24,21 @@ use ieee.numeric_std.all;
 -- cccc = constante
 -- xxxx = é irrelevante
 
--- Instruções OBRIGATÓRIAS a serem usadas na sua validação:
--- {'Acumulador ou não': 'ULA com acumulador',
+-- Instruções OBRIGATORIAS a serem usadas na sua validacao:
+-- {'Acumulador ou nao': 'ULA com acumulador',
 --  'Largura da ROM / instrução em bits': [19],
---  'Número de registradores no banco': [8],
+--  'Numero de registradores no banco': [8],
 --  'ADD ops': 'ADD com dois operandos apenas',
 --  'Carga de constantes': 'Carrega diretamente com LD sem somar',
---  'SUB ops': 'Subtração com dois operandos apenas',
---  'ADD ctes': 'Há instrução ADDI que soma com constante',
---  'SUB ctes': 'Há instrução que subtrai uma constante',
+--  'SUB ops': 'Subtracao com dois operandos apenas',
+--  'ADD ctes': 'Há instrucao ADDI que soma com constante',
+--  'SUB ctes': 'Há instrucao que subtrai uma constante',
 --  'Subtração': 'Subtração com SUB sem borrow',
---  'Comparações': 'Comparação apenas com CMPI',
+--  'Comparacoes': 'Comparacao apenas com CMPI',
 --  'Saltos condicionais': ['BLE', 'BMI'],
---  'Saltos': 'Incondicional é absoluto e condicional é relativo',
---  'Validação -- final do loop': 'Loop com DJNZ',
---  'Validação -- complicações': 'Instrução Halt ao final'}
+--  'Saltos': 'Incondicional e absoluto e condicional e relativo',
+--  'Validacao -- final do loop': 'Loop com DJNZ',
+--  'Validacao -- complicacoes': 'Instrucao Halt ao final'}
 
 entity micro_processador is
 	port(
@@ -132,7 +132,6 @@ architecture a_micro_processador of micro_processador is
 	component ULA is
 		port(
 			entra1, entra2 : in unsigned (15 downto 0);
-			entraSigned : in signed(15 downto 0);
 			sel0 : in unsigned (2 downto 0);
 			saida : out unsigned (15 downto 0);
 			flagZero : out std_logic;
@@ -169,14 +168,10 @@ architecture a_micro_processador of micro_processador is
 	
 	signal opcode, addres_mux_out, pc_data_out, soma_pc_out  : unsigned (6 downto 0);
     signal rom_instructions : unsigned (18 downto 0);
-	signal write_data_out, muxImm_out, read_data1_out, read_data2_out, imm_in: unsigned (15 downto 0);
-	signal immSigned_out : signed (15 downto 0);
-
+	signal write_data_out, muxImm_out, immJump_in, muxImmJump_out, read_data1_out, read_data2_out, imm_in, entra1_mux_out, pc_data16bit_out: unsigned (15 downto 0);
 	signal opULA_out, selRegDestino_out: unsigned (2 downto 0);
 	signal  state_out: unsigned(1 downto 0);
 	
-	signal address_jump_out : unsigned(6 downto 0);
-
 begin
 	-- Pinos TOP LEVEL para VHDL#5
 	clk <= clk_global;
@@ -189,9 +184,10 @@ begin
 
 	opcode <= rom_instructions (18 downto 12);
 	
-	address_jump_out <= rom_instructions (6 downto 0) - 1 when uc_jump_out = '1' else
-						 "0000000";
-	imm_in <= unsigned("0000000" & rom_instructions(11 downto 3));
+	-- Pega o endereco para onde deve pular APENAS quando o jump='1'
+	
+	imm_in <= unsigned("0000000" & rom_instructions(11 downto 3));	
+	immJump_in <= unsigned("000000000" & rom_instructions(6 downto 0));
     	
 	maq_estados0 : maq_estados port map(
 		clk => clk_global,
@@ -237,10 +233,6 @@ begin
 		flagOverflow_in => flagOverflow_out
 	);
 
--- and (flagZero='1' or (flagResultNegativo xor flagOverflow)='1') - ble
--- and flagResultNegativo='1' - bmi
-
-
 	banco_reg : banco_reg16bits port map(
         clk => clk_global,
         rst => rst,
@@ -260,28 +252,48 @@ begin
 	);
 
 	ula0 : ULA port map(
-		entra1 => read_data1_out,
+		entra1 => entra1_mux_out,
 		entra2 => muxImm_out,
-		entraSigned => immSigned_out,
 		sel0 => opULA_out,
 		saida => write_data_out,
 		flagZero => flagZero_out, 
 		flagNegativo => flagNegativo_out,
 		flagOverflow => flagOverflow_out
 	);
-
+	
+	-- Mux para escolher se envia o proximo valor do endereco ou o endereco de salto para o PC
 	address_mux: mux_2x1_7bits port map(
 		x0 => soma_pc_out,
-		x1 => address_jump_out,
+		x1 => write_data_out(6 downto 0),
         s0 => uc_jump_out,
         y0 => addres_mux_out 
 	);
+		
+	pc_data16bit_out <= "000000000" & pc_data_out;
 
+	-- Mux para escolher se envia para o entra1 da ULA ou se envia o endereco atual do PC
+	entra1_mux : mux_2x1_16bits port map(
+		x0 => read_data1_out,
+		x1 => pc_data16bit_out, -- valor sem a soma +1
+        sel => uc_jump_out,
+        y0 => entra1_mux_out
+	);
+	
+	-- Mux para escolher entre o imediato para operacao de somas ou salto
+	immJump_mux : mux_2x1_16bits port map(
+        x0 => imm_in,
+        x1 => immJump_in,
+        sel => uc_jump_out,
+        y0 => muxImmJump_out
+    );
+	
+	-- Mux para escolher entre enviar o valor do acumulador ou do valor imediato para o entra2
 	imm_mux: mux_2x1_16bits port map(
         x0 => read_data2_out,
-        x1 => imm_in,
+        x1 => muxImmJump_out,
         sel => uc_useImm_out,
         y0 => muxImm_out
     );
+	
 
 end architecture;

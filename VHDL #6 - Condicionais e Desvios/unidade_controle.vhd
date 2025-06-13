@@ -80,6 +80,9 @@ begin
 			 "001" when opcode="0000100" else -- SUBI
 			 "001" when opcode="0000101" else -- CMPI
 			 "010" when opcode="0001000" else -- MOVA
+			 "000" when opcode="1111110" else -- BLE
+			 "000" when opcode="1111101" else -- BMI
+			 "011" when opcode="1111111" else -- JUMP
 			 "011" when opcode="0001010" else -- MOVOA
 			 "111"; -- NOP
 
@@ -102,6 +105,9 @@ begin
 	useImm <= '1' when opcode="0000011" and maq_estados_out="10" else -- ADDI
 			  '1' when opcode="0000100" and maq_estados_out="10" else -- SUBI
 			  '1' when opcode="0000101" and maq_estados_out="10" else -- CMPI
+			  '1' when opcode="1111110" and maq_estados_out="10" else -- BLE
+			  '1' when opcode="1111101" and maq_estados_out="10" else -- BMI
+			  '1' when opcode="1111111" and maq_estados_out="10" else -- JUMP
 			  '0';
 
 	acumulador_wr_en <= '1' when opcode="0001000" and maq_estados_out="10" else -- MOVA

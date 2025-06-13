@@ -48,7 +48,7 @@ architecture a_rom of rom is
 		7  => "0000011000000001011", -- ADDI 1, reg3 -- 0300B D -- Soma 1 com o reg3 e guarda no acumulador
 		8  => "0001010000000000011", -- MOVOA reg3 -- 0A003 D -- Move o resultado da soma anterior guardado no acumulador para reg3
 		9  => "0000101000011101011", -- CMPI 29,reg3 -- 050F3 E -- Compara o valor 30 com o valor do reg3 para ativar flags de branch
-		10 => "1111110000000000100", -- BLE 4 (instr4) -- 7E004 Pula para a instrucao 4 da ROM caso as flag do CMPI permitirem
+		10 => "1111110000001111010", -- BLE 4 (instr4) -- 7E07A Pula para a instrucao 4 da ROM caso as flag do CMPI permitirem
 		11 => "0001000000000000100", -- MOVA reg4 -- 8004 -- Move o resultado guardado no reg4 para o acumulador
 		12 => "0001010000000000101", -- MOVOA reg5 -- A005 -- Move o resultado guardado no acumulador para o reg5
 		others => (others => '0')

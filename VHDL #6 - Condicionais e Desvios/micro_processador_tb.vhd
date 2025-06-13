@@ -70,12 +70,6 @@ begin
 	rst <= '1';
 	wait for 100 ns;
     rst <= '0';    
-    wait for 100 ns;
-	wait for 100 ns;
-	wait for 100 ns;
-	wait for 100 ns;
-	wait for 100 ns;
-	wait for 100 ns;
 
 	wait;
 end process;
