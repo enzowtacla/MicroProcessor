@@ -1,17 +1,25 @@
 -- MSB b18               b0 LSB
 
--- MOVOA: 0001010 xxxxxxxxx  ddd -- Move do ACUMULADOR para um REG
--- MOVA:  0001000 xxxxxxxxx  sss -- Move PARA O ACUMULADOR
+-- ACESSO A RAM:
+-- Para acessar o endereco da ram e necessario usar o MOVA para mover o valor do endereco para o acumulador para ser lido
+-- Pois foi uma das solucoes encontradas para evitar o problema da RAM ler o endereco e ao mesmo tempo estar recebendo o mesmo valor do endereco para ser escrito ou lido com LOAD/STORE
+
+-- LOAD  regD :  0001010 xxxxxxxxx ddd -- Carrega o valor guardado no endereco da RAM no regD utilizando o valor do endereco no acumulador
+-- STORE regS :  0001011 xxxxxxxxx sss -- Guarda o valor que esta no regS no endereco da RAM utilizando o valor do endereco no acumulador
+
+-- MOVOA: 0001001 xxxxxxxxx  ddd -- Move do ACUMULADOR para um REG
+-- MOVA:  0001000 xxxxxxxxx  sss -- Move o valor de um REG PARA O ACUMULADOR
 
 -- NOP:   0000000 xxxxxxxxxxxx -- NAO FAZ NADA
--- JUMP:  1111111 xxxxx  ddddddd -- Salto incondicional
--- BLEA:  1111110 xxxxxxxxx ddd -- Branch se for menos QUE ou IGUAL
--- BMIA:  1111101 xxxxxxxxx ddd -- Branch se a flag de negativo = 1
+-- JUMP:  1111111 xxxxx ddddddd -- Salto incondicional
+-- BLE:   1111110 xxxxx ddddddd -- Branch se for menos QUE ou IGUAL
+-- BMI:   1111101 xxxxx ddddddd -- Branch se a flag de negativo = 1
 
 -- ADD:   0000001 xxxxxx xxx sss -- Soma com o valor que está no acumulador e salva NO ACUMULADOR
 -- SUB:   0000010 xxxxxx xxx sss -- Subtrai com o valor que está no acumulador e salva NO ACUMULADOR
 -- ADDI:  0000011 ccccccccc sss -- Soma com uma constante(entra2) com valor no reg(entra1)
 -- SUBI:  0000100 ccccccccc sss -- Soma com uma constante(entra2) com valor no reg(entra1)
+-- CMPI:  0000101 ccccccccc sss -- Faz uma subtracao de ccccccccc - reg(sss) e envia o resultado das flags para a unidade de controle
 
 -- onde
 -- ddd  = identifica o registrador destino
