@@ -31,14 +31,14 @@ architecture a_rom of rom is
 		--LOOP PARA RETIRAR OS PARES DA RAM--
 		11 => "0001001000000000010", -- MOVOA reg2 -- HEX: 9002 -- move o valor 33 no reg2 
 		12 => "0000110000100010011", -- LDI 34, reg3 -- HEX: 6013
-		13 => "0000100000000010011", -- SUBI 2, reg3 -- HEX: 3013
+		13 => "0000100000000010011", -- SUBI 2, reg3 -- HEX: 4013
 		14 => "0001001000000000011", -- MOVOA reg3 -- HEX: 9003
 		-- Esse ponto o acumulador vai ter como resposta 4+n que sera utilizado para remover os pares da RAM
 		15 => "0001011000000000000", -- STORE reg0 -- HEX: B000
-		16 => "0000101000000010011", -- CMPI 2, reg3 -- HEX: 5013 
+		16 => "0000101000000100011", -- CMPI 4, reg3 -- HEX: 5013 
 		17 => "1111011000001111100", -- DJNZ -4 -- HEX: 7B07C
 		18 => "0000000000000000000", -- NOP
-		19  => "0000000000000000000", -- NOP
+		19 => "0000000000000000000", -- NOP
 		20 => "0000000000000000000", -- NOP
 		-- LOOP PARA RETIRAR OS MULT DE 3
 		21 => "0001000000000000010", -- MOVA reg2 -- HEX: 8002
@@ -47,7 +47,7 @@ architecture a_rom of rom is
 		24 => "0000100000000011011", -- SUBI 3, reg3 -- HEX: 401B
 		25 => "0001001000000000011", -- MOVOA reg3 -- HEX: 9003
 		26 => "0001011000000000000", -- STORE reg0 -- HEX: B000
-		27 => "0000101000000011011", -- CMPI 3, reg3 -- HEX: 501B
+		27 => "0000101000000110011", -- CMPI 6, reg3 -- HEX: 501B
 		28 => "1111011000001111100", -- DJNZ -4 -- HEX: 7B07C
 		29  => "0000000000000000000", -- NOP
 		30  => "0000000000000000000", -- NOP
@@ -70,7 +70,7 @@ architecture a_rom of rom is
 		45 => "0000101000100001011", -- CMPI 33, reg3 -- HEX: 510B
 		46 => "1111101000001111100", -- BLE -4 -- HEX: 7D07C
 		47 => "1111110000000000000", -- HALT -- HEX: 7E000
-		-- => "", -- -- HEX:
+		-- => "", -- -- HEX:0000100000000010011
 		others => (others => '0')
 	);
 	begin
